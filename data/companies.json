@@ -1,0 +1,27 @@
+{
+  "Deepesh": {
+    "company_name": "Deepesh",
+    "company_type": "Private Limited",
+    "city": "sad",
+    "state": "sd",
+    "created_date": "",
+    "status": "Active"
+  },
+  "Deep": {
+    "company_name": "Deep",
+    "company_type": "Private Limited",
+    "city": "bangalore",
+    "state": "karnataka",
+    "created_at": "2025-12-01 08:41:46",
+    "status": "Active"
+  },
+  "unity": {
+    "company_name": "unity",
+    "company_type": "Private Limited",
+    "city": "unity",
+    "state": "Andhra Pradesh",
+    "logo_path": "logo.png",
+    "created_at": "2025-12-02 13:37:40",
+    "status": "Active"
+  }
+}

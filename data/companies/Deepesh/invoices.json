@@ -1,0 +1,18 @@
+[
+  {
+    "invoice_id": "INV00001",
+    "client_name": "Gauri",
+    "date": "2025-11-23",
+    "items": [
+      {
+        "description": "Pencil",
+        "qty": 5.0,
+        "rate": 10.0,
+        "line_total": 50.0
+      }
+    ],
+    "status": "Paid",
+    "created_date": "2025-11-23 20:51:34",
+    "last_modified": "2025-11-23 20:51:34"
+  }
+]

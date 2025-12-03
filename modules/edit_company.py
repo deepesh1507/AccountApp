@@ -1,0 +1,590 @@
+"""
+Edit Company Module - Enhanced UI
+Pre-fills form with existing company data with professional validation
+"""
+
+import customtkinter as ctk
+from tkinter import messagebox, filedialog
+from datetime import datetime
+from .database_manager import DatabaseManager
+from .smart_widgets import SmartEntry, SmartComboBox, ValidationLabel
+import re
+from typing import Dict, Any
+from PIL import Image
+from pathlib import Path
+import shutil
+
+class EditCompany:
+    def __init__(self, root: ctk.CTk, app_controller: Any, company_data: Dict[str, Any]):
+        self.root = root
+        self.app = app_controller
+        # Load FULL company data from meta.json to ensure we have everything
+        self.db = DatabaseManager()
+        full_data = self.db.load_json(company_data.get('company_name'), 'meta.json')
+        self.company_data = full_data if full_data else company_data
+        
+        self.root.title(f"Edit Company - {self.company_data.get('company_name', '')}")
+        self.logo_path = self.company_data.get('logo_path') # Store current logo path (relative)
+        self.new_logo_source = None # Store path if user selects new logo
+        
+        self.setup_ui()
+        self.populate_form()
+
+    def setup_ui(self):
+        # Clear existing widgets
+        for widget in self.root.winfo_children():
+            widget.destroy()
+
+        # Main container with scrolling
+        container = ctk.CTkFrame(self.root, fg_color=("gray90", "gray13"))
+        container.pack(fill="both", expand=True)
+
+        self.scroll_frame = ctk.CTkScrollableFrame(
+            container, 
+            fg_color=("white", "gray20"), 
+            scrollbar_button_color="#f57c00"
+        )
+        self.scroll_frame.pack(fill="both", expand=True, padx=40, pady=20)
+
+        # Header
+        header_frame = ctk.CTkFrame(self.scroll_frame, fg_color="#f57c00", height=80)
+        header_frame.pack(fill="x")
+        header_frame.pack_propagate(False)
+
+        title_label = ctk.CTkLabel(
+            header_frame, 
+            text="✏️ Edit Company Details", 
+            font=ctk.CTkFont(size=28, weight="bold"), 
+            text_color="white"
+        )
+        title_label.pack(side="left", padx=30, pady=20)
+
+        # Back button
+        back_btn = ctk.CTkButton(
+            header_frame, 
+            text="← Back to Select", 
+            width=150, 
+            height=40, 
+            command=self.go_back,
+            fg_color="#e65100",
+            hover_color="#bf360c"
+        )
+        back_btn.pack(side="right", padx=30)
+        
+        # Form content
+        form_frame = ctk.CTkFrame(self.scroll_frame, fg_color="transparent")
+        form_frame.pack(fill="both", expand=True, padx=20, pady=20)
+        form_frame.grid_columnconfigure(0, weight=1, minsize=200)
+        form_frame.grid_columnconfigure(1, weight=2, minsize=300)
+
+        # Section 1: Basic Company Information
+        row = 0
+        self.create_section_header(form_frame, "📋 Basic Company Information", row)
+        row += 1
+
+        # Logo Edit Section
+        logo_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+        logo_frame.grid(row=row, column=0, columnspan=2, sticky="ew", padx=20, pady=10)
+        
+        self.logo_preview = ctk.CTkLabel(logo_frame, text="No Logo", width=100, height=100, fg_color="gray80", corner_radius=10)
+        self.logo_preview.pack(side="left", padx=(0, 20))
+        
+        btn_frame = ctk.CTkFrame(logo_frame, fg_color="transparent")
+        btn_frame.pack(side="left")
+        
+        ctk.CTkButton(btn_frame, text="📷 Change Logo", command=self.select_logo, width=150).pack(pady=5)
+        ctk.CTkLabel(btn_frame, text="Supported: PNG, JPG (Max 2MB)", font=ctk.CTkFont(size=11), text_color="gray60").pack()
+
+        row += 1
+        
+        self.company_name = SmartEntry(
+            form_frame, 
+            required=True,
+            help_text="Unique company identifier (cannot be changed)",
+            width=300
+        )
+        self.company_name.configure(state="disabled")
+        self.create_field_row(form_frame, "Company Name *", self.company_name, row)
+        
+        row += 1
+        self.company_alias = SmartEntry(
+            form_frame,
+            help_text="Display name for the company",
+            width=300
+        )
+        self.create_field_row(form_frame, "Company Alias", self.company_alias, row)
+        
+        row += 1
+        self.company_type = SmartComboBox(
+            form_frame,
+            values=["Private Limited", "Public Limited", "Partnership", "Sole Proprietorship", "LLP"],
+            width=300,
+            allow_custom=False
+        )
+        self.create_field_row(form_frame, "Company Type *", self.company_type, row)
+        
+        row += 1
+        self.industry = SmartEntry(form_frame, width=300, placeholder_text="e.g., Manufacturing, IT Services")
+        self.create_field_row(form_frame, "Industry/Sector", self.industry, row)
+        
+        row += 1
+        self.business_nature = SmartEntry(form_frame, width=300, placeholder_text="Brief description")
+        self.create_field_row(form_frame, "Nature of Business", self.business_nature, row)
+        
+        # Section 2: Contact Information
+        row += 1
+        self.create_section_header(form_frame, "📞 Contact Information", row)
+        
+        row += 1
+        self.email = SmartEntry(
+            form_frame,
+            required=True,
+            validation_func=self.validate_email,
+            help_text="Primary email address",
+            width=300
+        )
+        self.create_field_row(form_frame, "Email Address *", self.email, row)
+        
+        row += 1
+        self.phone = SmartEntry(
+            form_frame,
+            required=True,
+            validation_func=self.validate_phone,
+            help_text="Primary contact number",
+            width=300
+        )
+        self.create_field_row(form_frame, "Phone Number *", self.phone, row)
+        
+        row += 1
+        self.mobile = SmartEntry(form_frame, width=300, placeholder_text="Mobile number")
+        self.create_field_row(form_frame, "Mobile Number", self.mobile, row)
+        
+        row += 1
+        self.website = SmartEntry(form_frame, width=300, placeholder_text="https://example.com")
+        self.create_field_row(form_frame, "Website", self.website, row)
+        
+        # Section 3: Address Information
+        row += 1
+        self.create_section_header(form_frame, "🏢 Address Information", row)
+        
+        row += 1
+        self.address_line1 = SmartEntry(form_frame, required=True, width=300)
+        self.create_field_row(form_frame, "Address Line 1 *", self.address_line1, row)
+        
+        row += 1
+        self.address_line2 = SmartEntry(form_frame, width=300)
+        self.create_field_row(form_frame, "Address Line 2", self.address_line2, row)
+        
+        row += 1
+        self.city = SmartEntry(form_frame, required=True, width=300)
+        self.create_field_row(form_frame, "City *", self.city, row)
+        
+        row += 1
+        self.state = SmartEntry(form_frame, required=True, width=300)
+        self.create_field_row(form_frame, "State *", self.state, row)
+        
+        row += 1
+        self.pincode = SmartEntry(form_frame, required=True, width=300)
+        self.create_field_row(form_frame, "Pincode/ZIP *", self.pincode, row)
+        
+        row += 1
+        self.country = SmartEntry(form_frame, required=True, width=300)
+        self.create_field_row(form_frame, "Country *", self.country, row)
+        
+        # Section 4: Tax & Registration Details
+        row += 1
+        self.create_section_header(form_frame, "📄 Tax & Registration Details", row)
+        
+        row += 1
+        self.pan = SmartEntry(
+            form_frame, 
+            width=300,
+            validation_func=self.validate_pan,
+            help_text="10-character PAN number"
+        )
+        self.create_field_row(form_frame, "PAN Number", self.pan, row)
+        
+        row += 1
+        self.gst = SmartEntry(
+            form_frame,
+            width=300,
+            validation_func=self.validate_gst,
+            help_text="15-character GST number"
+        )
+        self.create_field_row(form_frame, "GST Number", self.gst, row)
+        
+        row += 1
+        self.tan = SmartEntry(form_frame, width=300)
+        self.create_field_row(form_frame, "TAN Number", self.tan, row)
+        
+        row += 1
+        self.cin = SmartEntry(form_frame, width=300)
+        self.create_field_row(form_frame, "CIN Number", self.cin, row)
+        
+        # Section 5: Banking Details
+        row += 1
+        self.create_section_header(form_frame, "🏦 Banking Details", row)
+        
+        row += 1
+        self.bank_name = SmartEntry(form_frame, width=300)
+        self.create_field_row(form_frame, "Bank Name", self.bank_name, row)
+        
+        row += 1
+        self.account_number = SmartEntry(form_frame, width=300)
+        self.create_field_row(form_frame, "Account Number", self.account_number, row)
+        
+        row += 1
+        self.ifsc_code = SmartEntry(
+            form_frame,
+            width=300,
+            validation_func=self.validate_ifsc,
+            help_text="11-character IFSC code"
+        )
+        self.create_field_row(form_frame, "IFSC Code", self.ifsc_code, row)
+        
+        row += 1
+        self.branch = SmartEntry(form_frame, width=300)
+        self.create_field_row(form_frame, "Branch Name", self.branch, row)
+        
+        # Section 6: Financial Year & Currency
+        row += 1
+        self.create_section_header(form_frame, "💰 Financial Settings", row)
+        
+        row += 1
+        self.fy_start = SmartComboBox(
+            form_frame,
+            values=["January", "February", "March", "April", "May", "June", 
+                    "July", "August", "September", "October", "November", "December"],
+            width=300,
+            allow_custom=False
+        )
+        self.create_field_row(form_frame, "Financial Year Start *", self.fy_start, row)
+        
+        row += 1
+        self.currency = SmartComboBox(
+            form_frame,
+            values=["INR - Indian Rupee", "USD - US Dollar", "EUR - Euro", 
+                    "GBP - British Pound", "AED - UAE Dirham"],
+            width=300,
+            allow_custom=False
+        )
+        self.create_field_row(form_frame, "Base Currency *", self.currency, row)
+        
+        # Section 7: Additional Settings
+        row += 1
+        self.create_section_header(form_frame, "⚙️ Additional Settings", row)
+        
+        row += 1
+        self.gst_enabled = ctk.CTkCheckBox(
+            form_frame, 
+            text="Enable GST/Tax Management", 
+            font=ctk.CTkFont(size=13)
+        )
+        self.gst_enabled.grid(row=row, column=0, columnspan=2, sticky="w", pady=10, padx=10)
+        
+        row += 1
+        self.inventory_enabled = ctk.CTkCheckBox(
+            form_frame, 
+            text="Enable Inventory Management", 
+            font=ctk.CTkFont(size=13)
+        )
+        self.inventory_enabled.grid(row=row, column=0, columnspan=2, sticky="w", pady=10, padx=10)
+        
+        row += 1
+        notes_label = ctk.CTkLabel(
+            form_frame, 
+            text="Notes/Remarks", 
+            font=ctk.CTkFont(size=13, weight="bold")
+        )
+        notes_label.grid(row=row, column=0, sticky="ne", pady=10, padx=(20, 10))
+        self.notes = ctk.CTkTextbox(form_frame, width=300, height=80)
+        self.notes.grid(row=row, column=1, sticky="w", pady=10, padx=10)
+        
+        # Action Buttons
+        row += 1
+        button_frame = ctk.CTkFrame(form_frame, fg_color="transparent")
+        button_frame.grid(row=row, column=0, columnspan=2, pady=30)
+        
+        save_btn = ctk.CTkButton(
+            button_frame, 
+            text="✓ Update Company", 
+            font=ctk.CTkFont(size=16, weight="bold"), 
+            width=200, 
+            height=50, 
+            command=self.update_company,
+            fg_color="#2e7d32",
+            hover_color="#1b5e20"
+        )
+        save_btn.pack(side="left", padx=10)
+        
+        cancel_btn = ctk.CTkButton(
+            button_frame, 
+            text="✕ Cancel", 
+            font=ctk.CTkFont(size=16, weight="bold"), 
+            width=150, 
+            height=50, 
+            command=self.go_back,
+            fg_color="#c62828",
+            hover_color="#8e0000"
+        )
+        cancel_btn.pack(side="left", padx=10)
+
+    def select_logo(self):
+        """Open file dialog to select logo"""
+        file_path = filedialog.askopenfilename(
+            title="Select Company Logo",
+            filetypes=[("Image files", "*.png;*.jpg;*.jpeg")]
+        )
+        if file_path:
+            self.new_logo_source = file_path
+            self.update_logo_preview(file_path)
+
+    def update_logo_preview(self, image_path):
+        try:
+            img = Image.open(image_path)
+            img = img.resize((100, 100), Image.Resampling.LANCZOS)
+            photo = ctk.CTkImage(light_image=img, dark_image=img, size=(100, 100))
+            self.logo_preview.configure(image=photo, text="")
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to load image: {e}")
+
+    def load_current_logo(self):
+        """Load existing logo if available"""
+        if self.logo_path:
+            try:
+                full_path = self.db.get_company_path(self.company_data.get('company_name')) / self.logo_path
+                if full_path.exists():
+                    self.update_logo_preview(str(full_path))
+            except Exception:
+                pass
+
+    def create_section_header(self, parent, text, row=0):
+        header_frame = ctk.CTkFrame(parent, fg_color="#fff3e0", height=40)
+        header_frame.grid(row=row, column=0, columnspan=2, sticky="ew", pady=(20, 10), padx=5)
+        header_frame.grid_columnconfigure(0, weight=1)
+        header_label = ctk.CTkLabel(
+            header_frame, 
+            text=text, 
+            font=ctk.CTkFont(size=16, weight="bold"), 
+            text_color="#f57c00"
+        )
+        header_label.pack(pady=10, padx=10, anchor="w")
+
+    def create_field_row(self, parent, label_text, widget, row):
+        label = ctk.CTkLabel(
+            parent, 
+            text=label_text, 
+            font=ctk.CTkFont(size=13, weight="bold"), 
+            anchor="e", 
+            width=180
+        )
+        label.grid(row=row, column=0, sticky="e", pady=10, padx=(20, 10))
+        widget.grid(row=row, column=1, sticky="w", pady=10, padx=10)
+
+    # Validation functions
+    def validate_email(self, value):
+        if not value:
+            return True, ""  # Optional field
+        if bool(re.match(r"[^@]+@[^@]+\.[^@]+", value)):
+            return True, ""
+        return False, "Invalid email format"
+
+    def validate_phone(self, value):
+        if not value:
+            return False, "Phone number is required"
+        if bool(re.match(r"^\+?[\d\s\-()]{10,}$", value)):
+            return True, ""
+        return False, "Invalid phone number format"
+
+    def validate_pan(self, value):
+        if not value:
+            return True, ""  # Optional
+        if bool(re.match(r"^[A-Z]{5}[0-9]{4}[A-Z]$", value.upper())):
+            return True, ""
+        return False, "Invalid PAN format (e.g., ABCDE1234F)"
+
+    def validate_gst(self, value):
+        if not value:
+            return True, ""  # Optional
+        if len(value) == 15 and value.isalnum():
+            return True, ""
+        return False, "Invalid GST format (15 alphanumeric characters)"
+
+    def validate_ifsc(self, value):
+        if not value:
+            return True, ""  # Optional
+        if bool(re.match(r"^[A-Z]{4}0[A-Z0-9]{6}$", value.upper())):
+            return True, ""
+        return False, "Invalid IFSC code format"
+
+    def populate_form(self):
+        """Fills the form with the existing company data."""
+        self.company_name.insert(0, self.company_data.get("company_name", ""))
+        self.company_alias.insert(0, self.company_data.get("display_name", self.company_data.get("company_name", "")))
+        self.company_type.set(self.company_data.get("company_type", "Private Limited"))
+        self.industry.insert(0, self.company_data.get("industry", ""))
+        self.business_nature.insert(0, self.company_data.get("business_nature", ""))
+        self.email.insert(0, self.company_data.get("email", ""))
+        self.phone.insert(0, self.company_data.get("phone", ""))
+        self.mobile.insert(0, self.company_data.get("mobile", ""))
+        self.website.insert(0, self.company_data.get("website", ""))
+        self.address_line1.insert(0, self.company_data.get("address_line1", ""))
+        self.address_line2.insert(0, self.company_data.get("address_line2", ""))
+        self.city.insert(0, self.company_data.get("city", ""))
+        self.state.insert(0, self.company_data.get("state", ""))
+        self.pincode.insert(0, self.company_data.get("pincode", ""))
+        self.country.insert(0, self.company_data.get("country", "India"))
+        self.pan.insert(0, self.company_data.get("pan", ""))
+        self.gst.insert(0, self.company_data.get("gst", ""))
+        self.tan.insert(0, self.company_data.get("tan", ""))
+        self.cin.insert(0, self.company_data.get("cin", ""))
+        self.bank_name.insert(0, self.company_data.get("bank_name", ""))
+        self.account_number.insert(0, self.company_data.get("account_number", ""))
+        self.ifsc_code.insert(0, self.company_data.get("ifsc_code", ""))
+        self.branch.insert(0, self.company_data.get("branch", ""))
+        self.fy_start.set(self.company_data.get("fy_start", "April"))
+        
+        # Handle currency
+        currency_code = self.company_data.get("currency", "INR")
+        currency_map = {
+            "INR": "INR - Indian Rupee",
+            "USD": "USD - US Dollar",
+            "EUR": "Euro",
+            "GBP": "GBP - British Pound",
+            "AED": "AED - UAE Dirham"
+        }
+        self.currency.set(currency_map.get(currency_code, "INR - Indian Rupee"))
+        
+        if self.company_data.get("gst_enabled", True):
+            self.gst_enabled.select()
+        else:
+            self.gst_enabled.deselect()
+            
+        if self.company_data.get("inventory_enabled", True):
+            self.inventory_enabled.select()
+        else:
+            self.inventory_enabled.deselect()
+            
+        self.notes.insert("1.0", self.company_data.get("notes", ""))
+        
+        # Load logo
+        self.load_current_logo()
+
+    def validate_form(self):
+        """Validate all required fields"""
+        errors = []
+        
+        # Validate required fields
+        if not self.email.validate():
+            errors.append("Valid email is required")
+        if not self.phone.validate():
+            errors.append("Valid phone number is required")
+        if not self.address_line1.get().strip():
+            errors.append("Address Line 1 is required")
+        if not self.city.get().strip():
+            errors.append("City is required")
+        if not self.state.get().strip():
+            errors.append("State is required")
+        if not self.pincode.get().strip():
+            errors.append("Pincode is required")
+        if not self.country.get().strip():
+            errors.append("Country is required")
+            
+        # Validate optional fields if filled
+        if self.pan.get() and not self.pan.validate():
+            errors.append("Invalid PAN format (e.g., ABCDE1234F)")
+        if self.gst.get() and not self.gst.validate():
+            errors.append("Invalid GST format (15 characters)")
+        if self.ifsc_code.get() and not self.ifsc_code.validate():
+            errors.append("Invalid IFSC code format")
+            
+        return errors
+
+    def update_company(self):
+        """Validates and saves the updated company data."""
+        errors = self.validate_form()
+        if errors:
+            messagebox.showerror("Validation Error", "\n".join(errors))
+            return
+
+        db = DatabaseManager()
+        name = self.company_name.get().strip()
+
+        # Get all companies
+        all_companies = db.get_all_companies()
+        
+        # The data to be saved in the company's own meta.json
+        company_meta_data = db.load_json(name, 'meta.json') or {}
+        company_meta_data.update({
+            'company_name': name,
+            'display_name': self.company_alias.get().strip() or name,
+            'company_type': self.company_type.get(),
+            'industry': self.industry.get().strip(),
+            'business_nature': self.business_nature.get().strip(),
+            'email': self.email.get().strip(),
+            'phone': self.phone.get().strip(),
+            'mobile': self.mobile.get().strip(),
+            'website': self.website.get().strip(),
+            'address_line1': self.address_line1.get().strip(),
+            'address_line2': self.address_line2.get().strip(),
+            'city': self.city.get().strip(),
+            'state': self.state.get().strip(),
+            'pincode': self.pincode.get().strip(),
+            'country': self.country.get().strip(),
+            'pan': self.pan.get().strip().upper(),
+            'gst': self.gst.get().strip().upper(),
+            'tan': self.tan.get().strip().upper(),
+            'cin': self.cin.get().strip().upper(),
+            'bank_name': self.bank_name.get().strip(),
+            'account_number': self.account_number.get().strip(),
+            'ifsc_code': self.ifsc_code.get().strip().upper(),
+            'branch': self.branch.get().strip(),
+            'fy_start': self.fy_start.get(),
+            'currency': self.currency.get().split(" - ")[0],
+            'gst_enabled': bool(self.gst_enabled.get()),
+            'inventory_enabled': bool(self.inventory_enabled.get()),
+            'notes': self.notes.get("1.0", "end-1c"),
+            'modified_at': datetime.now().isoformat()
+        })
+
+        # Update companies index  
+        if name in all_companies:
+            # Preserve existing logo_path if not uploading new logo
+            existing_logo = all_companies[name].get('logo_path', '')
+            all_companies[name].update({
+                "company_name": name,
+                "company_type": self.company_type.get(),
+                "city": self.city.get().strip(),
+                "state": self.state.get().strip(),
+                "status": "Active",
+                "logo_path": existing_logo,
+                "modified_at": datetime.now().isoformat()
+            })
+
+        try:
+            # Handle Logo Update
+            if self.new_logo_source:
+                try:
+                    company_dir = db.get_company_path(name)
+                    src_path = Path(self.new_logo_source)
+                    if src_path.exists():
+                        dest_path = company_dir / "logo.png"
+                        shutil.copy2(src_path, dest_path)
+                        company_meta_data['logo_path'] = "logo.png"
+                        all_companies[name]['logo_path'] = "logo.png"
+                except Exception as e:
+                    print(f"Failed to update logo: {e}")
+
+            # Save the detailed meta.json for the company
+            db.save_json(name, 'meta.json', company_meta_data)
+            # Save the main companies index
+            db.save_json_index(all_companies)
+            
+            messagebox.showinfo("Success", f"Company '{name}' updated successfully!")
+            self.go_back()
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to update company:\\n{str(e)}")
+
+    def go_back(self):
+        """Return to the select company screen."""
+        self.app.show_select_company()

@@ -1,0 +1,32 @@
+[
+  {
+    "code": "1000",
+    "name": "Assets",
+    "type": "asset",
+    "parent": null
+  },
+  {
+    "code": "2000",
+    "name": "Liabilities",
+    "type": "liability",
+    "parent": null
+  },
+  {
+    "code": "3000",
+    "name": "Equity",
+    "type": "equity",
+    "parent": null
+  },
+  {
+    "code": "4000",
+    "name": "Revenue",
+    "type": "revenue",
+    "parent": null
+  },
+  {
+    "code": "5000",
+    "name": "Expenses",
+    "type": "expense",
+    "parent": null
+  }
+]

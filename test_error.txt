@@ -1,0 +1,81 @@
+﻿python : Traceback 
+(most recent call 
+last):
+At line:1 char:1
++ python 
+test_form.py 2>&1 | 
+Out-File -FilePath 
+test_error.txt 
+-Encodin ...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (Traceba   
+ ck (most recent     
+call last)::Stri    
+ng) [], RemoteEx    
+ception
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 
+  File "C:\Users\rkpa
+t\OneDrive\Desktop\Ac
+countApp\test_form.py
+", line 35, in 
+test_form
+    form.add_field("E
+ntry ID:", id_entry)
+    ~~~~~~~~~~~~~~^^^
+^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rkpa
+t\OneDrive\Desktop\Ac
+countApp\modules\enha
+nced_form.py", line 
+199, in add_field
+    widget.pack(fill=
+"x", pady=(0, 5))
+    ~~~~~~~~~~~^^^^^^
+^^^^^^^^^^^^^^^^^
+  File "C:\Users\rkpa
+t\AppData\Local\Progr
+ams\Python\Python313\
+Lib\site-packages\cus
+tomtkinter\windows\wi
+dgets\core_widget_cla
+sses\ctk_base_class.p
+y", line 298, in pack
+    return super().pa
+ck(**self._apply_argu
+ment_scaling(kwargs))
+           ~~~~~~~~~~
+~~^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\rkpa
+t\AppData\Local\Progr
+ams\Python\Python313\
+Lib\tkinter\__init__.
+py", line 2602, in 
+pack_configure
+    self.tk.call(
+    ~~~~~~~~~~~~^
+          ('pack', 
+'configure', self._w)
+          ^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^
+          + 
+self._options(cnf, 
+kw))
+          ^^^^^^^^^^^
+^^^^^^^^^^^^^^
+_tkinter.TclError: 
+cannot use geometry 
+manager pack inside .
+!ctktoplevel.!enhance
+dform.!ctkframe2.!can
+vas.!ctkscrollablefra
+me.!ctkframe which 
+already has slaves 
+managed by grid
+Error creating form:

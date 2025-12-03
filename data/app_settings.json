@@ -1,0 +1,15 @@
+{
+  "theme": "dark",
+  "color_scheme": "dark-blue",
+  "font_family": "Times New Roman",
+  "font_size": 14,
+  "auto_backup": false,
+  "backup_interval_days": 7,
+  "date_format": "DD-MM-YYYY",
+  "currency_symbol": "INR",
+  "fiscal_year_start": "04-01",
+  "invoice_prefix": "INV-",
+  "voucher_prefix": "JV-",
+  "show_tooltips": true,
+  "window_size": "1200x700"
+}

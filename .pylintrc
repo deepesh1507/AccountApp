@@ -1,0 +1,8 @@
+[MASTER]
+init-hook='import sys; sys.path.append(".")'
+
+[MESSAGES CONTROL]
+disable=C0111,C0103,C0303,W0621,R0903,R0913
+
+[FORMAT]
+max-line-length=120

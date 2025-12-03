@@ -1,0 +1,35 @@
+﻿============================= test session starts =============================
+platform win32 -- Python 3.13.7, pytest-9.0.1, pluggy-1.6.0
+rootdir: C:\Users\rkpat\OneDrive\Desktop\AccountApp
+plugins: anyio-4.9.0, langsmith-0.3.37
+collected 7 items
+
+tests\test_journal.py ..F....                                            [100%]
+
+================================== FAILURES ===================================
+_____________________________ test_search_entries _____________________________
+
+journal_module = <modules.journal_entries.JournalEntries object at 0x00000187750C6990>
+
+    def test_search_entries(journal_module):
+        """Test searching entries"""
+        journal_module.entries = [
+            {"entry_id": "JV-00001", "narration": "Opening Balance"},
+            {"entry_id": "JV-00002", "narration": "Rent Payment"}
+        ]
+    
+        # Mock search entry
+        journal_module.search_entry = MagicMock()
+        journal_module.search_entry.get.return_value = "Rent"
+    
+        journal_module.search_entries()
+    
+>       assert len(journal_module.filtered_entries) == 1
+E       assert 0 == 1
+E        +  where 0 = len([])
+E        +    where [] = <modules.journal_entries.JournalEntries object at 0x00000187750C6990>.filtered_entries
+
+tests\test_journal.py:119: AssertionError
+=========================== short test summary info ===========================
+FAILED tests/test_journal.py::test_search_entries - assert 0 == 1
+========================= 1 failed, 6 passed in 0.88s =========================

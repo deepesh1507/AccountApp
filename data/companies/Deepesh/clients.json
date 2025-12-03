@@ -1,0 +1,24 @@
+[
+  {
+    "client_id": "CLI0001",
+    "client_name": "Gauri",
+    "client_type": "Individual",
+    "email": "gauri@gmail.com",
+    "phone": "9487595857",
+    "mobile": "",
+    "website": "",
+    "address": "",
+    "city": "",
+    "state": "",
+    "pincode": "",
+    "country": "",
+    "gst_number": "",
+    "pan_number": "",
+    "credit_limit": 0.0,
+    "payment_terms": 30,
+    "outstanding_balance": 0.0,
+    "status": "Active",
+    "notes": "",
+    "created_date": "2025-11-23 20:50:55"
+  }
+]

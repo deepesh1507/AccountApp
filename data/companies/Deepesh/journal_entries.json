@@ -1,0 +1,42 @@
+[
+  {
+    "entry_id": "JV-00001",
+    "date": "2025-11-23",
+    "type": "Journal",
+    "narration": "DD",
+    "lines": [
+      {
+        "account_code": "Pen",
+        "debit": 250.0,
+        "credit": 200.0
+      },
+      {
+        "account_code": "Pencil",
+        "debit": 50.0,
+        "credit": 100.0
+      }
+    ],
+    "created_by": "Deepesh",
+    "created_at": "2025-11-23T19:23:19.865366"
+  },
+  {
+    "entry_id": "JV-00002",
+    "date": "2025-11-23",
+    "type": "Journal",
+    "narration": "Pendrive",
+    "lines": [
+      {
+        "account_code": "Pendrive",
+        "debit": 45620.0,
+        "credit": 40000.0
+      },
+      {
+        "account_code": "CD",
+        "debit": 0.0,
+        "credit": 5620.0
+      }
+    ],
+    "created_by": "Deepesh",
+    "created_at": "2025-11-23T20:26:53.315634"
+  }
+]

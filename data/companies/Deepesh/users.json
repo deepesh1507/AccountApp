@@ -1,0 +1,28 @@
+[
+  {
+    "username": "admin",
+    "password": "admin",
+    "role": "admin",
+    "created_at": "2025-11-21T21:16:23.618937"
+  },
+  {
+    "user_id": 2,
+    "full_name": "Deepesh",
+    "username": "Deepesh",
+    "password": "57cc601ef87e1b1c1e96d05b8733fbb654ad90ec269055e535f439bcfc05f2e8",
+    "email": "dada.deepesh@gmail.com",
+    "phone": "9407881817",
+    "designation": "",
+    "department": "",
+    "role": "User",
+    "permissions": [
+      "View Reports",
+      "Create Invoices",
+      "Manage Clients",
+      "Manage Accounts"
+    ],
+    "status": "Active",
+    "created_date": "2025-11-21 21:24:26",
+    "last_login": "2025-12-03 20:41:38"
+  }
+]
