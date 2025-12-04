@@ -134,6 +134,10 @@ class SelectCompany:
             companies = self.db.get_all_companies()
             if isinstance(companies, dict) and companies:
                 self.companies = list(companies.values())
+                print(f"DEBUG: Loaded {len(self.companies)} companies")
+                if self.companies:
+                    sample = self.companies[0]
+                    print(f"DEBUG: Sample - {sample.get('company_name')}: {sample.get('city')}, {sample.get('state')}")
             else:
                 self.companies = []
 

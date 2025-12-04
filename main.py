@@ -198,8 +198,13 @@ class AccountingApp:
 
     def show_edit_company(self, company_data: dict[str, Any]):
         """Clears the window and displays the Edit Company Screen."""
-        self.clear_window()
-        self.current_screen = EditCompany(self.root, self, company_data)
+        try:
+            logger.info(f"Showing edit company screen for: {company_data.get('company_name')}")
+            self.clear_window()
+            self.current_screen = EditCompany(self.root, self, company_data)
+        except Exception as e:
+            logger.error(f"Failed to show edit company screen: {str(e)}", exc_info=True)
+            messagebox.showerror("Error", f"Failed to load edit company screen:\\n{str(e)}")
 
     def show_journal_entries(self, company_data: dict[str, Any], user_data: dict[str, Any]):
         """Clears the window and displays the Journal Entries screen."""

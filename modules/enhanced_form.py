@@ -136,7 +136,7 @@ class EnhancedForm(ctk.CTkFrame):
         )
         header.grid(row=start_row, column=0, sticky="ew", padx=20, pady=(20, 10))
         
-        # Section frame
+        # Section frame - uses PACK internally to avoid geometry conflicts
         section = ctk.CTkFrame(
             self.content_frame,
             fg_color=("white", "gray20"),
@@ -146,6 +146,49 @@ class EnhancedForm(ctk.CTkFrame):
         
         # Configure column weight for content_frame to ensure full width
         self.content_frame.grid_columnconfigure(0, weight=1)
+        
+        self.sections.append(section)
+        self.current_section = section
+        self.current_row = 0
+        
+        return section
+    
+    def add_field(self, label: str, widget: Any, column: int = 0,
+                  colspan: int = 1, help_text: str = "") -> Any:
+        """
+        Add a field to the current section
+        Widgets should be created with current_section as master
+        """
+        if not self.current_section:
+            raise ValueError("No section created. Call add_section() first.")
+        
+        # Pack directly into current_section to avoid geometry manager conflicts
+        # Label
+        label_widget = ctk.CTkLabel(
+            self.current_section,
+            text=label,
+            font=("Arial", 13, "bold"),
+            anchor="w"
+        )
+        label_widget.pack(anchor="w", padx=15, pady=(8, 2))
+        
+        # Widget - it should already be created with current_section as master
+        widget.pack(fill="x", padx=15, pady=(0, 5))
+        
+        # Help text
+        if help_text:
+            help_label = ctk.CTkLabel(
+                self.current_section,
+                text=f"💡 {help_text}",
+                font=("Arial", 10),
+                text_color="gray",
+                anchor="w"
+            )
+            help_label.pack(anchor="w", padx=15)
+        
+        # Store field reference
+        field_id = label.lower().replace(" ", "_").replace(":", "")
+        self.fields[field_id] = widget
         
         return widget
     

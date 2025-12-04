@@ -18,12 +18,31 @@ class EditCompany:
     def __init__(self, root: ctk.CTk, app_controller: Any, company_data: Dict[str, Any]):
         self.root = root
         self.app = app_controller
+        
+        # Store the original company name FIRST (from the passed data)
+        self.original_company_name = company_data.get('company_name', '')
+        print(f"DEBUG: EditCompany initialized for: '{self.original_company_name}'")
+        print(f"DEBUG: Passed data keys: {list(company_data.keys())}")
+        
         # Load FULL company data from meta.json to ensure we have everything
         self.db = DatabaseManager()
-        full_data = self.db.load_json(company_data.get('company_name'), 'meta.json')
-        self.company_data = full_data if full_data else company_data
+        try:
+            if self.original_company_name:
+                full_data = self.db.load_json(self.original_company_name, 'meta.json')
+                if full_data:
+                    self.company_data = full_data
+                    print(f"DEBUG: Loaded full data from meta.json")
+                else:
+                    self.company_data = company_data
+                    print(f"DEBUG: Using passed data (meta.json empty)")
+            else:
+                self.company_data = company_data
+                print(f"WARNING: No company name in passed data!")
+        except Exception as e:
+            print(f"WARNING: Could not load meta.json: {e}")
+            self.company_data = company_data
         
-        self.root.title(f"Edit Company - {self.company_data.get('company_name', '')}")
+        self.root.title(f"Edit Company - {self.original_company_name}")
         self.logo_path = self.company_data.get('logo_path') # Store current logo path (relative)
         self.new_logo_source = None # Store path if user selects new logo
         
@@ -508,7 +527,14 @@ class EditCompany:
             return
 
         db = DatabaseManager()
-        name = self.company_name.get().strip()
+        # Use the stored original company name (it's set in __init__)
+        name = self.original_company_name
+        
+        if not name:
+            messagebox.showerror("Error", "Company name is missing!")
+            return
+        
+        print(f"DEBUG: Updating company: '{name}'")
 
         # Get all companies
         all_companies = db.get_all_companies()
@@ -547,19 +573,23 @@ class EditCompany:
             'modified_at': datetime.now().isoformat()
         })
 
-        # Update companies index  
+        # Update companies index - ensure ALL fields needed for display are updated
         if name in all_companies:
             # Preserve existing logo_path if not uploading new logo
             existing_logo = all_companies[name].get('logo_path', '')
-            all_companies[name].update({
+            # Update the index entry with all fields shown in select company cards
+            all_companies[name] = {
                 "company_name": name,
                 "company_type": self.company_type.get(),
                 "city": self.city.get().strip(),
                 "state": self.state.get().strip(),
+                "email": self.email.get().strip(),
+                "phone": self.phone.get().strip(),
                 "status": "Active",
                 "logo_path": existing_logo,
+                "created_at": all_companies[name].get('created_at', datetime.now().isoformat()),
                 "modified_at": datetime.now().isoformat()
-            })
+            }
 
         try:
             # Handle Logo Update
@@ -580,10 +610,23 @@ class EditCompany:
             # Save the main companies index
             db.save_json_index(all_companies)
             
+            # DEBUG: Show what was saved
+            print(f"\n{'='*60}")
+            print(f"SAVED COMPANY DATA FOR: {name}")
+            print(f"City: {all_companies[name].get('city')}")
+            print(f"State: {all_companies[name].get('state')}")
+            print(f"Type: {all_companies[name].get('company_type')}")
+            print(f"Email: {all_companies[name].get('email')}")
+            print(f"Phone: {all_companies[name].get('phone')}")
+            print(f"{'='*60}\n")
+            
             messagebox.showinfo("Success", f"Company '{name}' updated successfully!")
             self.go_back()
         except Exception as e:
-            messagebox.showerror("Error", f"Failed to update company:\\n{str(e)}")
+            print(f"ERROR saving company: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            messagebox.showerror("Error", f"Failed to update company:\n{str(e)}")
 
     def go_back(self):
         """Return to the select company screen."""

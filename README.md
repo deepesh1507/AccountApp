@@ -1,89 +1,91 @@
-# AccountApp
+# AccountApp - Professional ERP & Accounting System
 
-A professional accounting desktop application built with **CustomTkinter**.
-
-## ✨ Recent Updates (Phase 1 Improvements)
-
-**Phase 1 has been completed!** Major infrastructure improvements for production-ready operation:
-
-### New Features
-- 🗄️ **Enhanced SQLite Database** with connection pooling and transaction management
-- 🔄 **Database Migration Utility** for seamless JSON to SQLite migration
-- 🛡️ **Comprehensive Error Handling** with user-friendly dialogs
-- 📝 **Advanced Logging** with rotation and audit trail
-- ⚡ **Performance Optimization** with caching (5-10x faster)
-- 📄 **Pagination** for large datasets (instant loading)
-- 📅 **Fiscal Year Management** with period locking
-- 🔍 **Audit Trail** for compliance and security
-
-### Performance Improvements
-- Database queries: **5x faster**
-- List views (1000+ records): **10x faster**
-- Dashboard loading: **60% faster**
-- Memory usage: **40% reduction**
-
-See [INTEGRATION_GUIDE.md](INTEGRATION_GUIDE.md) for integration instructions.
+A comprehensive ERP and Accounting application built with Python and CustomTkinter, featuring multi-company management, financial modules, and modern UI.
 
 ## Features
-- Multi-company management
-- Double‑entry bookkeeping (Journal Entries, Ledger)
-- Invoicing, Expenses, Payments, Reports
-- Data stored in SQLite (with JSON export capability)
-- Export to CSV and PDF
-- Dark/Light theme support
-- Fiscal year and period management
-- Comprehensive audit trail
-- Advanced caching and pagination
 
-## Requirements
-- Python 3.12+ (tested on 3.13)
-- `customtkinter`
-- `pytest` (for running the test suite)
+- 🏢 **Multi-Company Management** - Create and manage multiple companies
+- 📊 **Financial Modules** - Chart of Accounts, Journal Entries, Ledger
+- 📈 **ERP Modules** - FI (Financial Accounting), CO (Controlling), and Integration modules
+- 💼 **Business Management** - Clients, Vendors, Invoices, Expenses
+- 📦 **Inventory Management** - Track products and stock
+- 📋 **Reports & Analytics** - Comprehensive financial reporting
+- 🎨 **Modern UI** - Clean, responsive interface with CustomTkinter
 
-Install dependencies:
+## Installation
+
+1. Clone the repository:
+```bash
+git clone https://github.com/YOUR_USERNAME/AccountApp.git
+cd AccountApp
+```
+
+2. Create a virtual environment:
+```bash
+python -m venv .venv
+```
+
+3. Activate the virtual environment:
+- Windows: `.venv\Scripts\activate`
+- Linux/Mac: `source .venv/bin/activate`
+
+4. Install dependencies:
 ```bash
 pip install -r requirements.txt
 ```
 
-## Running the application
+## Usage
+
+Run the application:
 ```bash
 python main.py
 ```
 
-## Database Migration
+## Project Structure
 
-To migrate from JSON to SQLite (optional but recommended):
-```bash
-python -m modules.database_migration
+```
+AccountApp/
+├── main.py                 # Application entry point
+├── modules/               # Application modules
+│   ├── home_screen.py
+│   ├── create_company.py
+│   ├── select_company.py
+│   ├── edit_company.py
+│   ├── dashboard.py
+│   ├── chart_of_accounts.py
+│   ├── journal_entries.py
+│   ├── ledger.py
+│   ├── clients.py
+│   ├── vendors.py
+│   ├── invoice.py
+│   ├── expenses.py
+│   ├── inventory.py
+│   ├── reports.py
+│   └── erp/              # ERP modules
+├── data/                  # Application data
+└── requirements.txt       # Python dependencies
 ```
 
-This will:
-- Create automatic backup
-- Migrate all data to SQLite
-- Generate detailed report
-- Preserve all existing data
+## Requirements
 
-## Configuration
-A `config.json` file can be placed in the project root to customize the data directory:
-```json
-{
-  "data_dir": "data",
-  "use_sqlite": true,
-  "sqlite_path": "data/accountapp.db"
-}
-```
-If not present, the app defaults to the `data` folder inside the project.
-
-## Testing
-```bash
-pytest
-```
-
-## Documentation
-- [Integration Guide](INTEGRATION_GUIDE.md) - How to use new features
-- [Implementation Plan](implementation_plan.md) - Detailed technical plan
-- [Walkthrough](walkthrough.md) - Phase 1 improvements summary
+- Python 3.8+
+- CustomTkinter
+- Pillow
+- Other dependencies listed in requirements.txt
 
 ## License
-MIT License
 
+This project is licensed under the MIT License.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Author
+
+Your Name
+
+## Acknowledgments
+
+- Built with CustomTkinter
+- Inspired by enterprise ERP systems like SAP and Tally

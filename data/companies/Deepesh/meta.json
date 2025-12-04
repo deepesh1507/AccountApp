@@ -10,7 +10,7 @@
   "website": "",
   "address_line1": "dfsgfgdsad",
   "address_line2": "",
-  "city": "sad",
+  "city": "satna",
   "state": "sd",
   "pincode": "560041",
   "country": "India",
@@ -24,10 +24,12 @@
   "branch": "",
   "fy_start": "April",
   "currency": "INR",
-  "gst_enabled": 1,
-  "inventory_enabled": 1,
+  "gst_enabled": true,
+  "inventory_enabled": true,
   "notes": "",
   "created_at": "2025-11-21T21:16:23.618915",
   "status": "Active",
-  "modified_at": "2025-11-21T21:16:23.618928"
+  "modified_at": "2025-12-04T08:58:15.408107",
+  "company_name": "Deepesh",
+  "logo_path": "logo.png"
 }

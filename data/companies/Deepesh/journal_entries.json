@@ -38,5 +38,25 @@
     ],
     "created_by": "Deepesh",
     "created_at": "2025-11-23T20:26:53.315634"
+  },
+  {
+    "entry_id": "JV-00003",
+    "date": "2025-12-04",
+    "type": "Journal",
+    "narration": "",
+    "lines": [
+      {
+        "account_code": "153",
+        "debit": 562.0,
+        "credit": 0.0
+      },
+      {
+        "account_code": "Chandan",
+        "debit": 0.0,
+        "credit": 562.0
+      }
+    ],
+    "created_at": "2025-12-04T09:27:55.019714",
+    "modified_at": "2025-12-04T09:27:55.030772"
   }
 ]

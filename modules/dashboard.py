@@ -317,11 +317,60 @@ class Dashboard:
         dashboard = ctk.CTkScrollableFrame(parent, fg_color="transparent")
         dashboard.pack(side="left", fill="both", expand=True, padx=(10, 20), pady=20)
         
-        welcome_frame = ctk.CTkFrame(dashboard, fg_color=("white", "gray20"), corner_radius=12)
-        welcome_frame.pack(fill="x", pady=(0, 15))
+        # Company Logo Showcase Section
+        logo_showcase = ctk.CTkFrame(dashboard, fg_color=("white", "gray20"), corner_radius=12, border_width=2, border_color=("#1976d2", "#0d47a1"))
+        logo_showcase.pack(fill="both", expand=True, pady=(0, 15))
         
-        ctk.CTkLabel(welcome_frame, text=f"Welcome back, {self.user_data.get('username', 'User')}!", font=ctk.CTkFont(size=22, weight="bold")).pack(anchor="w", padx=20, pady=(15, 5))
-        ctk.CTkLabel(welcome_frame, text=f"📅 {datetime.now().strftime('%A, %B %d, %Y')}", font=ctk.CTkFont(size=12), text_color=("gray50", "gray60")).pack(anchor="w", padx=20, pady=(0, 15))
+        logo_content = ctk.CTkFrame(logo_showcase, fg_color="transparent")
+        logo_content.pack(fill="both", expand=True, padx=40, pady=40)
+        
+        # Try to load and display company logo
+        company_logo = self.get_large_company_logo()
+        if company_logo:
+            logo_label = ctk.CTkLabel(logo_content, text="", image=company_logo)
+            logo_label.image = company_logo  # Keep reference
+            logo_label.pack(pady=(20, 15))
+        else:
+            # Show placeholder icon if no logo
+            placeholder = ctk.CTkLabel(
+                logo_content,
+                text="🏢",
+                font=ctk.CTkFont(size=120),
+                fg_color=("gray90", "gray25"),
+                corner_radius=20,
+                width=220,
+                height=220
+            )
+            placeholder.pack(pady=(20, 15))
+        
+        # Company name below logo
+        ctk.CTkLabel(
+            logo_content,
+            text=self.company_name,
+            font=ctk.CTkFont(size=28, weight="bold"),
+            text_color="#1976d2"
+        ).pack(pady=(0, 5))
+        
+        # Company type/info
+        company_type = self.company_data.get('company_type', 'Company')
+        ctk.CTkLabel(
+            logo_content,
+            text=company_type,
+            font=ctk.CTkFont(size=16),
+            text_color=("gray50", "gray60")
+        ).pack(pady=(5, 5))
+        
+        # Location if available
+        city = self.company_data.get('city', '')
+        state = self.company_data.get('state', '')
+        if city or state:
+            location = f"📍 {city}, {state}".strip(", ")
+            ctk.CTkLabel(
+                logo_content,
+                text=location,
+                font=ctk.CTkFont(size=14),
+                text_color=("gray50", "gray60")
+            ).pack(pady=(5, 20))
         
         # Initialize StringVars for KPIs
         self.kpi_vars = {
@@ -350,21 +399,7 @@ class Dashboard:
         # Start background loading
         threading.Thread(target=self.load_data_background, daemon=True).start()
         
-        ctk.CTkLabel(dashboard, text="📋 RECENT ACTIVITY", font=ctk.CTkFont(size=16, weight="bold"), text_color=("#1976d2", "#64b5f6")).pack(anchor="w", pady=(25, 10))
-        
-        activity_frame = ctk.CTkFrame(dashboard, fg_color=("white", "gray20"), corner_radius=12)
-        activity_frame.pack(fill="both", expand=True, pady=(0, 15))
-        
-        ctk.CTkLabel(activity_frame, text="Recent activities will appear here when you create invoices, journal entries, or expenses.", font=ctk.CTkFont(size=12), text_color=("gray50", "gray60")).pack(padx=20, pady=30)
-        
-        ctk.CTkLabel(dashboard, text="⚡ QUICK REPORTS", font=ctk.CTkFont(size=16, weight="bold"), text_color=("#1976d2", "#64b5f6")).pack(anchor="w", pady=(25, 10))
-        
-        reports_frame = ctk.CTkFrame(dashboard, fg_color="transparent")
-        reports_frame.pack(fill="x")
-        
-        ctk.CTkButton(reports_frame, text="📋 Trial Balance", command=self.open_reports, fg_color="#2e7d32", height=45, font=ctk.CTkFont(size=13, weight="bold")).pack(side="left", fill="x", expand=True, padx=5)
-        ctk.CTkButton(reports_frame, text="💰 P&L Statement", command=self.open_reports, fg_color="#1976d2", height=45, font=ctk.CTkFont(size=13, weight="bold")).pack(side="left", fill="x", expand=True, padx=5)
-        ctk.CTkButton(reports_frame, text="📊 GST Reports", command=self.open_gst_tax, fg_color="#f9a825", height=45, font=ctk.CTkFont(size=13, weight="bold")).pack(side="left", fill="x", expand=True, padx=5)
+
 
     def create_kpi_card(self, parent, title, variable, color):
         card = ctk.CTkFrame(parent, fg_color=("white", "gray20"), corner_radius=12)
@@ -552,4 +587,19 @@ class Dashboard:
                     return ctk.CTkImage(light_image=img, dark_image=img, size=(40, 40))
         except Exception:
             pass
+        return None
+
+    def get_large_company_logo(self):
+        """Load large company logo for dashboard showcase"""
+        try:
+            logo_path = self.company_data.get('logo_path')
+            if logo_path:
+                full_path = self.db.get_company_path(self.company_name) / logo_path
+                if full_path.exists():
+                    img = Image.open(full_path)
+                    # Maintain aspect ratio while resizing to max 200x200
+                    img.thumbnail((200, 200), Image.Resampling.LANCZOS)
+                    return ctk.CTkImage(light_image=img, dark_image=img, size=(200, 200))
+        except Exception as e:
+            print(f"Error loading large logo: {e}")
         return None

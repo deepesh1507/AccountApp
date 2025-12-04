@@ -2,10 +2,14 @@
   "Deepesh": {
     "company_name": "Deepesh",
     "company_type": "Private Limited",
-    "city": "sad",
+    "city": "satna",
     "state": "sd",
-    "created_date": "",
-    "status": "Active"
+    "email": "deepesh@gmail.com",
+    "phone": "6894576286",
+    "status": "Active",
+    "logo_path": "logo.png",
+    "created_at": "2025-12-04T08:57:57.561701",
+    "modified_at": "2025-12-04T08:58:15.408161"
   },
   "Deep": {
     "company_name": "Deep",

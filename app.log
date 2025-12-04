@@ -1034,3 +1034,107 @@
 2025-12-03 20:42:50,779 - modules.database_manager - INFO - Storage initialized successfully
 2025-12-03 20:42:56,975 - modules.database_manager - INFO - Storage initialized successfully
 2025-12-03 20:43:57,613 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:16:08,282 - __main__ - INFO - AccountingApp initialized
+2025-12-03 21:16:10,968 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:16:17,320 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:16:17,970 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:16:21,183 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:16:21,528 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:17:35,790 - __main__ - INFO - AccountingApp initialized
+2025-12-03 21:17:46,771 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:17:52,882 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:17:54,514 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:17:58,873 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:17:59,167 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:23:35,699 - __main__ - INFO - AccountingApp initialized
+2025-12-03 21:23:40,069 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:23:50,877 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:24:30,083 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:24:37,523 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:24:37,961 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:28:37,883 - __main__ - INFO - AccountingApp initialized
+2025-12-03 21:28:53,770 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:29:08,633 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:29:09,281 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:29:21,284 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:29:26,533 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:29:31,146 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:34:11,244 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:34:21,902 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:34:22,493 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:43:16,072 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:43:24,899 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-03 21:43:25,651 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:52:06,016 - __main__ - INFO - AccountingApp initialized
+2025-12-04 07:52:10,413 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:52:15,173 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:52:17,157 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:52:31,470 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:52:33,099 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:54:57,221 - __main__ - INFO - AccountingApp initialized
+2025-12-04 07:54:59,775 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:55:03,317 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:55:16,290 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:55:18,165 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:56:15,317 - __main__ - INFO - AccountingApp initialized
+2025-12-04 07:56:22,369 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:56:28,110 - __main__ - INFO - Showing edit company screen for: Deepesh
+2025-12-04 07:56:28,403 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:56:40,101 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:56:42,522 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 07:58:54,314 - __main__ - INFO - AccountingApp initialized
+2025-12-04 08:01:19,939 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:01:23,822 - __main__ - INFO - Showing edit company screen for: Deepesh
+2025-12-04 08:01:24,244 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:01:36,054 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:01:37,435 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:01:40,711 - __main__ - INFO - Showing edit company screen for: Deepesh
+2025-12-04 08:01:40,964 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:01:50,739 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:01:51,928 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:04:03,076 - __main__ - INFO - AccountingApp initialized
+2025-12-04 08:40:31,222 - __main__ - INFO - AccountingApp initialized
+2025-12-04 08:42:15,304 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:42:18,581 - __main__ - INFO - Showing edit company screen for: Deepesh
+2025-12-04 08:42:18,938 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:42:27,096 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:42:31,233 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:43:28,429 - __main__ - INFO - AccountingApp initialized
+2025-12-04 08:43:31,781 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:43:34,660 - __main__ - INFO - Showing edit company screen for: Deepesh
+2025-12-04 08:43:35,045 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:43:45,647 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:47:13,745 - __main__ - INFO - AccountingApp initialized
+2025-12-04 08:57:40,102 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:57:44,513 - __main__ - INFO - Showing edit company screen for: Deepesh
+2025-12-04 08:57:44,691 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:57:57,558 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:57:59,405 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:58:03,303 - __main__ - INFO - Showing edit company screen for: Deepesh
+2025-12-04 08:58:03,438 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:58:15,406 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:58:17,211 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:58:28,646 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:58:29,297 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 08:58:41,811 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:22:59,360 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:23:02,805 - __main__ - INFO - Showing edit company screen for: Deepesh
+2025-12-04 09:23:03,026 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:23:06,000 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:23:17,215 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:23:17,937 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:26:46,182 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:26:46,517 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:27:55,033 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:27:56,859 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:28:04,746 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:28:18,460 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:28:33,384 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:34:18,743 - __main__ - INFO - AccountingApp initialized
+2025-12-04 09:34:23,368 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:34:30,952 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:34:31,433 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:34:38,843 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:38:44,453 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:38:59,626 - modules.database_manager - INFO - Storage initialized successfully
+2025-12-04 09:39:15,092 - modules.database_manager - INFO - Storage initialized successfully
